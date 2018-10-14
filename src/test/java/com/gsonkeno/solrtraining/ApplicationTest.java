@@ -119,15 +119,20 @@ public class ApplicationTest {
     public void testAnalysis() throws IOException, SolrServerException {
         FieldAnalysisRequest analysisRequest = new FieldAnalysisRequest();
         ArrayList<String> fieldTypes = new ArrayList<>();
-        fieldTypes.add("text_ik");
+//        fieldTypes.add("text_ik");
+//        analysisRequest.setQuery("黑色毛衣");
+//        analysisRequest.setFieldValue("黑色毛衣");
+
+        fieldTypes.add("text_ngrm");
+        analysisRequest.setQuery("马夹");
+        analysisRequest.setFieldValue("马夹");
         analysisRequest.setFieldTypes(fieldTypes);
-        analysisRequest.setQuery("黑色毛衣");
-        analysisRequest.setFieldValue("黑色毛衣");
 
         FieldAnalysisResponse response = analysisRequest.process(client, "item_v2");
         System.out.println(response);
 
-        FieldAnalysisResponse.Analysis fieldTypeAnalysisRes = response.getFieldTypeAnalysis("text_ik");
+        //FieldAnalysisResponse.Analysis fieldTypeAnalysisRes = response.getFieldTypeAnalysis("text_ik");
+        FieldAnalysisResponse.Analysis fieldTypeAnalysisRes = response.getFieldTypeAnalysis("text_ngrm");
 
         Iterable<AnalysisResponseBase.AnalysisPhase> analysisPhaseIterable = fieldTypeAnalysisRes.getQueryPhases();
         Iterator<AnalysisResponseBase.AnalysisPhase> analysisPhaseIterator = analysisPhaseIterable.iterator();
