@@ -70,6 +70,7 @@ public class ApplicationTest {
         ids.add("2");
         ids.add("3");
         ids.add("4");
+        ids.add("5");
         UpdateResponse updateResponse = client.deleteById("item_v2",ids);
         //这句很重要，否则不会删除
         client.commit("item_v2");
@@ -145,6 +146,23 @@ public class ApplicationTest {
                 System.out.println(token.getText() + "  " + token.getType() + "  " );
             }
         }
+    }
+
+    // springboot + solr 测试结果高亮
+    @Test
+    public void testHighLight() throws IOException, SolrServerException {
+        SolrQuery solrQuery = new SolrQuery();
+        //查询字段
+        solrQuery.setQuery("item_title:大衣马夹");
+        //solrQuery.setQuery("title:大衣马夹");
+        solrQuery.set("q.op","AND");
+        solrQuery.setHighlight(true);
+        //要高亮的字段
+        //注意，要高亮的字段类型最好与查询的字段类型一致
+        //例如:这里item_title和item_title1字段类型都是text_ik类型
+        solrQuery.addHighlightField("item_title1");
+        QueryResponse response = client.query("item_v2", solrQuery);
+        System.out.println(response);
     }
 
 
